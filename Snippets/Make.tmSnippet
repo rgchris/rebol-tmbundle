@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>make ${1:object!} [${2}]</string>
+	<key>name</key>
+	<string>Make</string>
+	<key>scope</key>
+	<string>source.rebol</string>
+	<key>tabTrigger</key>
+	<string>make</string>
+	<key>uuid</key>
+	<string>BD1B4FB2-726F-4AD1-B9F7-CA2F380F347E</string>
+</dict>
+</plist>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>context [
+	${1}
+]
+</string>
+	<key>name</key>
+	<string>Context</string>
+	<key>scope</key>
+	<string>source.rebol</string>
+	<key>tabTrigger</key>
+	<string>context</string>
+	<key>uuid</key>
+	<string>BCC4A93F-1991-479E-A90E-FB5540237BF0</string>
+</dict>
+</plist>

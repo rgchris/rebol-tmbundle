@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/local/bin/rebol -q
+
+REBOL [title: "Replace Value"]
+
+system/options/binary-base: 64
+set-modes system/ports/input [lines: false binary: false]
+
+; print mold copy system/ports/input q
+
+stats: either in*: copy system/ports/input [
+	context [
+		size: join "" [length? in* " bytes"]
+		values: words: unique-words: attempt [load/all in*]
+		use [rule w v val][
+			w: []
+			v: 0
+			parse compose [(values)] rule: [
+				any [
+					into rule
+					|
+					set val any-word! (
+						append w: [] to word! val
+						v: v + 1
+					)
+					|
+					skip (v: v + 1)
+				]
+			]
+			values: :v
+			words: length? w
+			unique-words: length? unique w
+		]
+	]
+][none]
+
+? stats</string>
+	<key>fallbackInput</key>
+	<string>document</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^S</string>
+	<key>name</key>
+	<string>Statistics</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>uuid</key>
+	<string>B2654576-1C69-11DC-AAB0-00112476DCAC</string>
+</dict>
+</plist>

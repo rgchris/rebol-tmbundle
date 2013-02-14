@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>deleted</key>
+	<array>
+		<string>8235267F-9F91-471E-84D7-8B442E138399</string>
+		<string>2C6F5DAA-4741-49F5-B429-D5718D617F6A</string>
+		<string>7279CCF0-FD1A-4A2B-97F9-9E7FDD185586</string>
+	</array>
+	<key>mainMenu</key>
+	<dict>
+		<key>items</key>
+		<array>
+			<string>66578A05-35E9-4598-B3F9-2758AC19A0E8</string>
+			<string>88E69532-ACA8-47D6-8B7B-1F60873FA18C</string>
+			<string>DE44A1D4-7D02-11DB-A89D-00112476DCAC</string>
+			<string>------------------------------------</string>
+			<string>E529BAA1-F71B-4DC0-A75D-85D4B5C1EE57</string>
+			<string>8235267F-9F91-471E-84D7-8B442E138399</string>
+			<string>2C6F5DAA-4741-49F5-B429-D5718D617F6A</string>
+		</array>
+		<key>submenus</key>
+		<dict/>
+	</dict>
+	<key>name</key>
+	<string>Rebol</string>
+	<key>ordering</key>
+	<array>
+		<string>66578A05-35E9-4598-B3F9-2758AC19A0E8</string>
+		<string>B2654576-1C69-11DC-AAB0-00112476DCAC</string>
+		<string>88E69532-ACA8-47D6-8B7B-1F60873FA18C</string>
+		<string>DE44A1D4-7D02-11DB-A89D-00112476DCAC</string>
+		<string>AF55DC3A-5995-11DD-A351-000D9374AD66</string>
+		<string>BCC4A93F-1991-479E-A90E-FB5540237BF0</string>
+		<string>AA5B1C00-E13A-11DB-A8AD-00112476DCAC</string>
+		<string>E529BAA1-F71B-4DC0-A75D-85D4B5C1EE57</string>
+		<string>BD1B4FB2-726F-4AD1-B9F7-CA2F380F347E</string>
+		<string>6BE0E13B-C4DD-478F-953A-2D84DBBCA2BA</string>
+		<string>C0DE7367-18DA-456D-BBA4-6C6DEF99DE8B</string>
+		<string>84284B94-56FB-4422-A664-EAAC6F07F7AD</string>
+		<string>8365A374-5BBC-47B1-8A2A-DE54B79FE5F0</string>
+	</array>
+	<key>uuid</key>
+	<string>630A0080-BE53-4D4A-9326-020351E8CB0E</string>
+</dict>
+</plist>

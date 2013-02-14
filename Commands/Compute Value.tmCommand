@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/local/bin/rebol -q
+
+REBOL [title: "Replace Value"]
+
+system/options/binary-base: 64
+change-dir first split-path to-rebol-file any [
+    get-env "TM_FILEPATH" "/tmp/"
+]
+
+set-modes system/ports/input [
+	lines: false
+	binary: false
+]
+
+in*: any [
+    get-env "TM_SELECTED_TEXT"
+    get-env "TM_CURRENT_LINE"
+]
+
+prin either in* [
+	either not error? err*: try [out*: do in*][
+		mold/all :out*
+	][
+		err*: disarm err*
+		rejoin [
+			" {^/** "
+			system/error/(err*/type)/type ": "
+			reform bind compose [(system/error/(err*/type)/(err*/id))] in err* 'self
+			"^/** Near: " mold get in err* 'near
+              "^/} "
+		]
+	]
+][""]</string>
+	<key>fallbackInput</key>
+	<string>line</string>
+	<key>input</key>
+	<string>selection</string>
+	<key>keyEquivalent</key>
+	<string>^d</string>
+	<key>name</key>
+	<string>Compute Value</string>
+	<key>output</key>
+	<string>replaceSelectedText</string>
+	<key>scope</key>
+	<string>source.rebol</string>
+	<key>uuid</key>
+	<string>DE44A1D4-7D02-11DB-A89D-00112476DCAC</string>
+</dict>
+</plist>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>content</key>
+	<string>func [${1:args}][
+	${2:body}
+]</string>
+	<key>name</key>
+	<string>Func</string>
+	<key>scope</key>
+	<string>source.rebol</string>
+	<key>tabTrigger</key>
+	<string>func</string>
+	<key>uuid</key>
+	<string>AA5B1C00-E13A-11DB-A8AD-00112476DCAC</string>
+</dict>
+</plist>

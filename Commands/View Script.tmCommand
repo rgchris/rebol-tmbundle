@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>beforeRunningCommand</key>
+	<string>nop</string>
+	<key>command</key>
+	<string>#!/usr/local/bin/rebview -ivqs
+
+REBOL [title: "View Script"]
+
+set-modes system/ports/input [lines: false binary: false]
+
+`target: any [
+	all [`target: get-env "TM_FILEPATH" to-file `target]
+	copy system/ports/input
+	{REBOL [Title: "No Content"] view layout [h1 "No Content Found"]}
+]
+
+do `target</string>
+	<key>input</key>
+	<string>document</string>
+	<key>keyEquivalent</key>
+	<string>^v</string>
+	<key>name</key>
+	<string>View Script</string>
+	<key>output</key>
+	<string>showAsTooltip</string>
+	<key>scope</key>
+	<string>source.rebol</string>
+	<key>uuid</key>
+	<string>AF55DC3A-5995-11DD-A351-000D9374AD66</string>
+</dict>
+</plist>

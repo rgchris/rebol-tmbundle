@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>changed</key>
+	<dict>
+		<key>beforeRunningCommand</key>
+		<string>nop</string>
+		<key>command</key>
+		<string>#!/usr/local/bin/rebol -qs
+
+REBOL [title: "Run Script"]
+
+set-modes system/ports/input [lines: false binary: false]
+
+`target: any [
+	all [`target: get-env "TM_FILEPATH" to-file `target]
+	copy system/ports/input
+	{REBOL [Title: "No Content"] view layout [h1 "No Content Found"]}
+]
+
+do `target</string>
+		<key>input</key>
+		<string>document</string>
+		<key>keyEquivalent</key>
+		<string>@r</string>
+		<key>name</key>
+		<string>Run Script</string>
+		<key>output</key>
+		<string>showAsHTML</string>
+		<key>scope</key>
+		<string>source.rebol</string>
+		<key>uuid</key>
+		<string>66578A05-35E9-4598-B3F9-2758AC19A0E8</string>
+	</dict>
+	<key>deleted</key>
+	<array/>
+	<key>isDelta</key>
+	<true/>
+</dict>
+</plist>
