@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>content</key>
-	<string>REBOL [
+	<string>Rebol [
 	Title: "${1:title}"
 	Date: `date "+%e-%b-%Y"`
 	Author: "${2:${TM_FULLNAME}}"
