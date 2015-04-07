@@ -13,7 +13,7 @@
 	<key>firstLineMatch</key>
 	<string>^#!/.*\brebol\b</string>
 	<key>foldingStartMarker</key>
-	<string>^([^;]*[\[\{\(])+\s*(\;.*)?$</string>
+	<string>^[^;]*[\[\{\(]\s*(;.*)?$</string>
 	<key>foldingStopMarker</key>
 	<string>^\s*[\]\}\)].*$</string>
 	<key>keyEquivalent</key>
@@ -197,7 +197,7 @@
 		<key>comment-line</key>
 		<dict>
 			<key>match</key>
-			<string>;.*?(?=\%&gt;|$)</string>
+			<string>;([^%\n]|%(?!&gt;))*</string>
 			<key>name</key>
 			<string>comment.line.semicolon.rebol</string>
 		</dict>
@@ -268,7 +268,7 @@
 		<key>comment-tag</key>
 		<dict>
 			<key>begin</key>
-			<string>&lt;!--</string>
+			<string>(?&lt;=^|[\s\[\]()}"])&lt;!--</string>
 			<key>end</key>
 			<string>--&gt;</string>
 			<key>name</key>
@@ -441,7 +441,7 @@
 		<key>string-rsp-tag</key>
 		<dict>
 			<key>begin</key>
-			<string>&lt;%(\==?|\:|\!)? </string>
+			<string>&lt;%(==?|:|!)? </string>
 			<key>end</key>
 			<string> %&gt;</string>
 			<key>name</key>
@@ -610,7 +610,7 @@
 		<key>value-date</key>
 		<dict>
 			<key>match</key>
-			<string>\d{1,2}\-(Jan(u(a(ry?)?)?)?|Feb(u(a(ry?)?)?)?|Mar(ch?)?|Apr(il?)?|May|June?|July?|Aug(u(st?)?)?|Sep(t(e(m(b(er?)?)?)?)?)?|Oct(o(b(er?)?)?)?|Nov(e(m(b(er?)?)?)?)?|Dec(e(m(b(er?)?)?)?)?)\-\d{2,4}(/\d{1,2}[:]\d{1,2}([:]\d{1,2}(\.\d{1,5})?)?([+-]\d{1,2}[:]\d{1,2})?)?</string>
+			<string>\d{1,4}\-(Jan(u(a(ry?)?)?)?|Feb(u(a(ry?)?)?)?|Mar(ch?)?|Apr(il?)?|May|June?|July?|Aug(u(st?)?)?|Sep(t(e(m(b(er?)?)?)?)?)?|Oct(o(b(er?)?)?)?|Nov(e(m(b(er?)?)?)?)?|Dec(e(m(b(er?)?)?)?)?|[1-9]|1[012])\-\d{1,4}(/\d{1,2}[:]\d{1,2}([:]\d{1,2}(\.\d{1,5})?)?([+-]\d{1,2}[:]\d{1,2})?)?</string>
 			<key>name</key>
 			<string>constant.other.date.rebol</string>
 		</dict>
@@ -624,7 +624,7 @@
 		<key>value-number</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;!\w|[.,])([-+]?((\d+[.,]?\d*)|([.,]\d+))((e|E)(\+|-)?\d+)?)(?=\W)</string>
+			<string>(?&lt;![\w.,])([-+]?((\d+[\d']*[.,]?[\d']*)|([.,]\d+[\d']*))((e|E)(\+|-)?\d+)?)(?=\W)</string>
 			<key>name</key>
 			<string>constant.numeric.rebol</string>
 		</dict>
@@ -655,10 +655,6 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#blocks</string>
-				</dict>
-				<dict>
-					<key>include</key>
 					<string>#value-date</string>
 				</dict>
 				<dict>
@@ -686,14 +682,14 @@
 		<key>word</key>
 		<dict>
 			<key>match</key>
-			<string>[A-Za-z=\-\?\!\_\*\+\.`~\&amp;][A-Za-z0-9=\-\!\?\_\*\+\.`~&amp;]*(/([A-Za-z=\-\?\!\_\*\+\.`~\&amp;][A-Za-z0-9=\-\!\?\_\*\+\.`~&amp;]*|\d+))*(?![A-Za-z0-9=_\-\!\?\*\+\.`~\&amp;\%])</string>
+			<string>(?&lt;=^|[\s\[\]()}"])[A-Za-z=\-\?\!\_\*\+\.`~\&amp;][A-Za-z0-9=\-\!\?\_\*\+\.`~&amp;]*(/\d+)*(/(?=[A-Za-z=\-\?\!\_\*\+\.`~\&amp;\(:'])|(?=[\s\[\]\(\)\{"]|$))</string>
 			<key>name</key>
 			<string>constant.other.word.rebol</string>
 		</dict>
 		<key>word-datatype</key>
 		<dict>
 			<key>match</key>
-			<string>\b(end\!|unset\!|error\!|datatype\!|context\!|native\!|action\!|routine\!|op\!|function\!|object\!|struct\!|library\!|port\!|any-type\!|any-word\!|any-function\!|number\!|series\!|any-string\!|any-block\!|symbol\!|word\!|set-word\!|get-word\!|lit-word\!|refinement\!|none\!|logic\!|integer\!|decimal\!|money\!|time\!|date\!|char\!|pair\!|event\!|tuple\!|bitset\!|string\!|issue\!|binary\!|file\!|email\!|url\!|image\!|tag\!|block\!|paren\!|path\!|set-path\!|lit-path\!|hash\!|list\!)(?=$|\W)</string>
+			<string>(?&lt;=^|[\s\[\]()}"])(end\!|unset\!|error\!|datatype\!|context\!|native\!|action\!|routine\!|op\!|function\!|object\!|struct\!|library\!|port\!|any-type\!|any-word\!|any-function\!|number\!|series\!|any-string\!|any-block\!|symbol\!|word\!|set-word\!|get-word\!|lit-word\!|refinement\!|none\!|logic\!|integer\!|decimal\!|money\!|time\!|date\!|char\!|pair\!|event\!|tuple\!|bitset\!|string\!|issue\!|binary\!|file\!|email\!|url\!|image\!|tag\!|block\!|paren\!|path\!|set-path\!|lit-path\!|hash\!|list\!)(?=[\s\[\](){"]|$)</string>
 			<key>name</key>
 			<string>keyword.control.datatype.rebol</string>
 		</dict>
@@ -707,42 +703,56 @@
 		<key>word-header</key>
 		<dict>
 			<key>match</key>
-			<string>Boron|REBOL|Rebol|Red(/System)?|Topaz|World</string>
+			<string>(?&lt;=^\[|^)(Boron|REBOL|Rebol|Red(/System)?|Topaz|World)(?=\s*\[)</string>
 			<key>name</key>
 			<string>keyword.control.header.rebol</string>
+		</dict>
+		<key>word-infix</key>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=^|[\s\[\]()}"])(\+\+?|--?|\*\*?|//?|=|&gt;=?|&lt;(=|&gt;)?)(?=[\s\[\](){"])</string>
+			<key>name</key>
+			<string>keyword.control.native.rebol</string>
 		</dict>
 		<key>word-lit</key>
 		<dict>
 			<key>match</key>
-			<string>'[A-Za-z=\-\?\!\_\*\+\.`~\&amp;][A-Za-z0-9=\-\!\?\_\*\+\.`~\&amp;]*(/([A-Za-z=\-\?\!\_\*\+\.`~][A-Za-z0-9=\-\!\?\_\*\+\.`~]*|\d+))*</string>
+			<string>(?&lt;=^|[\s\[\]()}"/])'[A-Za-z=\-\?\!\_\*\+\.`~\&amp;][A-Za-z0-9=\-\!\?\_\*\+\.`~\&amp;]*(/([A-Za-z=\-\?\!\_\*\+\.`~][A-Za-z0-9=\-\!\?\_\*\+\.`~]*|\d+))*</string>
 			<key>name</key>
 			<string>constant.other.litword.rebol</string>
 		</dict>
 		<key>word-logic</key>
 		<dict>
 			<key>match</key>
-			<string>\b(true|yes|false|off|none|no)(?![\w-=+&amp;~*])</string>
+			<string>(?&lt;=^|[\s\[\]()}"])(true|yes|false|off|none|no)(?=[\s\[\](){"])</string>
 			<key>name</key>
-			<string>keyword.control.logic.rebol</string>
+			<string>constant.other.logic.rebol</string>
 		</dict>
 		<key>word-native</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;![\w\-/.])(about|abs|absolute|action\?|add|alert|alias|all|alter|and~|and|any|any-block\?|any-function\?|any-string\?|any-type\?|any-word\?|append|arccosine|arcsine|arctangent|array|ask|at|back|binary\?|bind|bitset\?|block\?|body-of|boot-prefs|break|browse|build-tag|call|caret-to-offset|case|catch|center-face|change|change-dir|char\?|charset|checksum|choose|clean-path|clear|clear-fields|close|collect|comment|complement|compose|compress|confine|confirm|connected\?|context|continue-post|copy|cosine|cp|crypt-strength\?|cvs-date|cvs-version|datatype\?|date\?|debase|decimal\?|decode-cgi|decode-url|decompress|deflag-face|dehex|delete|demo|desktop|detab|dh-compute-key|dh-generate-key|dh-make-key|difference|dir\?|dirize|disarm|dispatch|divide|do|do-boot|do-events|do-face|do-face-alt|does|dsa-generate-key|dsa-make-key|dsa-make-signature|dsa-verify-signature|dump-face|dump-pane|echo|editor|either|else|email\?|emailer|empty\?|enbase|entab|equal\?|error\?|even\?|event\?|exclude|exists-thru\?|exists\?|exit|exp|extract|fifth|file\?|find|find-key-face|find-window|first|flag-face|flag-face\?|flash|focus|for|forall|foreach|forever|form|forskip|found\?|fourth|free|func|function\??|get|get-modes|get-net-info|get-style|get-word\?|greater-or-equal\?|greater\?|halt|has|hash\?|head\??|help|hide|hide-popup|if|image\?|import-email|in|in-window\?|index\?|info\?|inform|input|input\?|insert|insert-event-func|inside\?|integer\?|intersect|issue\?|join|keep|last|launch|launch-thru|layout|length\?|lesser-or-equal\?|lesser\?|library\?|link-app\?|link\?|list-dir|list\?|lit-path\?|lit-word\?|load|load-image|load-prefs|load-thru|log-10|log-2|log-e|logic\?|loop|lowercase|make|make-dir|make-face|max|maximum|maximum-of|min|minimum|minimum-of|modified\?|mold|money\?|multiply|native\?|negate|negative\?|net-error|next|none\?|not|not-equal\?|now|number\?|object\?|odd\?|offset-to-caret|offset\?|op\?|open|open-events|or|or~|outside\?|pair\?|paren\?|parse|parse-email-addrs|parse-header|parse-header-date|parse-xml|path-thru|path\?|pick|poke|port\?|positive\?|power|prin|print|probe|protect|protect-system|q|query|quit|random|read|read-io|read-net|read-thru|reboot|recycle|reduce|refinement\?|reform|rejoin|remainder|remold|remove|remove-event-func|rename|repeat|repend|replace|request|request-color|request-date|request-download|request-file|request-list|request-pass|request-text|resend|return|reverse|routine\?|rsa-encrypt|rsa-generate-key|rsa-make-key|same\?|save|save-prefs|save-user|screen-offset\?|script\?|scroll-para|second|secure|select|send|series\?|set|set-font|set-modes|set-net|set-para|set-path\?|set-style|set-user|set-user-name|set-word\?|show|show-popup|sine|size-text|size\?|skip|sort|source|span\?|spec-of|split-path|square-root|strict-equal\?|strict-not-equal\?|string\?|struct\?|stylize|subtract|switch|tag\?|tail\??|tangent|textinfo|third|throw|throw-on-error|time\?|title-of|to|to-binary|to-bitset|to-block|to-char|to-date|to-decimal|to-email|to-event|to-file|to-get-word|to-hash|to-hex|to-idate|to-image|to-integer|to-issue|to-list|to-lit-path|to-lit-word|to-local-file|to-logic|to-money|to-none|to-pair|to-paren|to-path|to-rebol-file|to-refinement|to-set-path|to-set-word|to-string|to-tag|to-time|to-tuple|to-url|to-word|trace|trim|try|tuple\?|types-of|type\?|unfocus|uninstall|union|unique|unless|unprotect|unset|unset\?|until|unview|update|upgrade|uppercase|url\?|Usage|use|values-of|value\?|vbug|view|view-install|view-prefs|view\?|viewed\?|wait|what|what-dir|while|win-offset\?|within\?|words-of|word\?|write|write-io|write-user|xor|xor~|zero\?|/local|thru|end)(?!(\w|-|\.))/?|(^|\s)(\+|-|\*\*?|//?|=|&gt;=?|&lt;(=|&gt;)?(?![/%])|\?)(?=$|\W)</string>
+			<string>(?&lt;=^|[\s\[\]()}"])(about|abs|absolute|action\?|add|alert|alias|all|alter|and~|and|any|any-block\?|any-function\?|any-string\?|any-type\?|any-word\?|append|arccosine|arcsine|arctangent|array|ask|at|back|binary\?|bind|bitset\?|block\?|body-of|boot-prefs|break|browse|build-tag|call|caret-to-offset|case|catch|center-face|change|change-dir|char\?|charset|checksum|choose|clean-path|clear|clear-fields|close|closure|collect|comment|complement|compose|compress|confine|confirm|connected\?|context|continue-post|copy|cosine|cp|crypt-strength\?|cvs-date|cvs-version|datatype\?|date\?|debase|decimal\?|decode-cgi|decode-url|decompress|deflag-face|dehex|delete|demo|desktop|detab|dh-compute-key|dh-generate-key|dh-make-key|difference|dir\?|dirize|disarm|dispatch|divide|do|do-boot|do-events|do-face|do-face-alt|does|dsa-generate-key|dsa-make-key|dsa-make-signature|dsa-verify-signature|dump-face|dump-pane|echo|editor|either|else|email\?|emailer|empty\?|enbase|entab|equal\?|error\?|even\?|event\?|exclude|exists-thru\?|exists\?|exit|exp|extract|fifth|file\?|find|find-key-face|find-window|first|flag-face|flag-face\?|flash|focus|for|forall|foreach|forever|form|forskip|found\?|fourth|free|func|function\??|get|get-env|get-modes|get-net-info|get-style|get-word\?|greater-or-equal\?|greater\?|halt|has|hash\?|head\??|help|hide|hide-popup|if|image\?|import-email|in|in-window\?|index\?|info\?|inform|input|input\?|insert|insert-event-func|inside\?|integer\?|intersect|issue\?|join|keep|last|launch|launch-thru|layout|length\?|lesser-or-equal\?|lesser\?|library\?|link-app\?|link\?|list-dir|list\?|lit-path\?|lit-word\?|load|load-image|load-prefs|load-thru|log-10|log-2|log-e|logic\?|loop|lowercase|make|make-dir|make-face|max|maximum|maximum-of|min|minimum|minimum-of|modified\?|mold|money\?|multiply|native\?|negate|negative\?|net-error|next|none\?|not|not-equal\?|now|number\?|object\?|odd\?|offset-to-caret|offset\?|op\?|open|open-events|or|or~|outside\?|pair\?|paren\?|parse|parse-email-addrs|parse-header|parse-header-date|parse-xml|path-thru|path\?|pick|poke|port\?|positive\?|power|prin|print|probe|protect|protect-system|q|query|quit|random|read|read-io|read-net|read-thru|reboot|recycle|reduce|refinement\?|reform|rejoin|remainder|remold|remove|remove-event-func|rename|repeat|repend|replace|request|request-color|request-date|request-download|request-file|request-list|request-pass|request-text|resend|return|reverse|routine\?|rsa-encrypt|rsa-generate-key|rsa-make-key|same\?|save|save-prefs|save-user|screen-offset\?|script\?|scroll-para|second|secure|select|send|series\?|set|set-env|set-font|set-modes|set-net|set-para|set-path\?|set-style|set-user|set-user-name|set-word\?|show|show-popup|sine|size-text|size\?|skip|sort|source|span\?|spec-of|split-path|square-root|strict-equal\?|strict-not-equal\?|string\?|struct\?|stylize|subtract|switch|tag\?|tail\??|tangent|textinfo|third|throw|throw-on-error|time\?|title-of|to|to-local-file|to-rebol-file|trace|trim|try|tuple\?|types-of|type\?|unfocus|uninstall|union|unique|unless|unprotect|unset|unset\?|until|unview|update|upgrade|uppercase|url\?|usage|use|values-of|value\?|vbug|view|view-install|view-prefs|view\?|viewed\?|wait|what|what-dir|while|win-offset\?|within\?|words-of|word\?|write|write-io|write-user|xor|xor~|zero\?|/local|thru|end)(/(?=[A-Za-z=\-\?\!\_\*\+\.`~\&amp;])|(?=[\s\[\](){"]|$))</string>
 			<key>name</key>
 			<string>keyword.control.native.rebol</string>
+		</dict>
+		<key>word-native-to-type</key>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=^|[\s\[\]()}"])(to-binary|to-bitset|to-block|to-char|to-date|to-decimal|to-email|to-event|to-file|to-get-word|to-hash|to-hex|to-idate|to-image|to-integer|to-issue|to-list|to-lit-path|to-lit-word|to-logic|to-money|to-none|to-pair|to-paren|to-path|to-refinement|to-set-path|to-set-word|to-string|to-tag|to-time|to-tuple|to-url|to-word)(?=[\s\[\](){"]|$)</string>
+			<key>name</key>
+			<string>constant.other.word.to-type.rebol</string>
 		</dict>
 		<key>word-parse</key>
 		<dict>
 			<key>match</key>
-			<string>\b(thru|some|opt|end)(?!(\w|-|\.))(?=$|\W)</string>
+			<string>(?&lt;=^|[\s\[\]()}"])(thru|some|opt|end)(?=[\s\[\](){"]|$)</string>
 			<key>name</key>
 			<string>keyword.control.parse.rebol</string>
 		</dict>
 		<key>word-qm</key>
 		<dict>
 			<key>match</key>
-			<string>\b(qm|render|redirect-to|publish|response|event|import|get-param|get-cookie|set-cookie|know|require)(?!(\w|-|\.))(?=$|\W)</string>
+			<string>(?&lt;=^|[\s\[\]()}"])(qm|route|render|redirect-to|publish|response|as|validate|verify|get-param|get-cookie|set-cookie|require)(/(?=[A-Za-z=\-\?\!\_\*\+\.`~\&amp;])|(?=[\s\[\](){"]))</string>
 			<key>name</key>
 			<string>keyword.control.qm.rebol</string>
 		</dict>
@@ -792,11 +802,23 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#word-native-to-type</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#word-infix</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#word-logic</string>
 				</dict>
 				<dict>
 					<key>include</key>
 					<string>#word-refine</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#word-qm</string>
 				</dict>
 				<dict>
 					<key>include</key>
