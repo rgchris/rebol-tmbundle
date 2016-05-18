@@ -5,13 +5,305 @@
 	<key>beforeRunningCommand</key>
 	<string>nop</string>
 	<key>command</key>
-	<string>#!/usr/local/bin/rebol -q
+	<string>#!/usr/local/bin/rebol -qs
 
-REBOL [title: "Replace Value"]
+Rebol [Title: "Evaluate Selected Text/Current Line"]
 
-system/options/binary-base: 64
-change-dir first split-path to-rebol-file any [
-    get-env "TM_FILEPATH" "/tmp/"
+textmate: make make object! [
+	column-number: line-number: line-index:
+	input-start-column: input-start-line: input-start-line-index:
+	selected-text: current-line: current-word: 
+	filepath: directory: filename:
+	project-directory: project-filepath: selected-file: selected-files:
+	mode: scope: comment-start:
+	fullname: organization-name:
+	app-path: bundle-path: support-path:
+	soft-tabs: tab-size: columns: none
+] collect [
+	foreach [name value] load mold list-env [
+		if name: find/match name "TM_" [
+			keep name: to set-word! replace/all lowercase name "_" "-"
+			keep/only switch/default name [
+				app-path: bundle-path:
+				directory: filename: filepath: git:
+				project-directory: project-filepath: selected-file:
+				support-path: [
+					to-rebol-file value
+				]
+				columns: column-number:
+				input-start-column: input-start-line: input-start-line-index:
+				line-index: line-number: pid: tab-size: [
+					to integer! value
+				]
+				scope: [parse/all value " "]
+				soft-tabs: [do value]
+			][
+				value
+			]
+		]
+	]
+]
+
+do bb: func [base [integer!]][
+	system/options/binary-base: switch/default base [
+		2 16 64 [base]
+	][16]
+] 16
+
+neaten: func [block [block!] /pairs /flat][
+	new-line/all/skip block not flat either pairs [2][1]
+]
+
+source: func [
+	"Prints the source code for a word." 
+	'word [word!]
+][
+	prin join word ": "
+	if not value? word [print "undefined" exit]
+	either any [native? get word op? get word action? get word][
+		print ["native" mold third get word]
+	][print mold get word]
+]
+
+dump-obj: func [
+	"Returns a block of information about an object." 
+	obj [object!] 
+	/match "Include only those that match a string or datatype" pat 
+	/local clip-str form-val form-pad words vals str wild
+][
+	clip-str: func [str] [
+		trim/lines str 
+		if (length? str) &gt; 50 [str: append copy/part str 50 "..."] 
+		str
+	] 
+	form-val: func [val] [
+		if any-block? :val [return reform ["length:" length? val]] 
+		if image? :val [return reform ["size:" val/size]] 
+		if any-function? :val [
+			val: third :val 
+			if block? val/1 [val: next val] 
+			return clip-str either string? val/1 [copy val/1] [mold val]
+		] 
+		if object? :val [val: next first val] 
+		clip-str mold :val
+	] 
+	form-pad: func [val size] [
+		val: form val 
+		insert/dup tail val #" " size - length? val 
+		val
+	] 
+	words: first obj 
+	vals: next second obj 
+	obj: copy [] 
+	wild: all [string? pat find pat "*"] 
+	foreach word next words [
+		type: type?/word pick vals 1 
+		str: form word 
+		if any [
+			not match 
+			all [
+				not unset? pick vals 1 
+				either string? :pat [
+					either wild [
+						tail? any [find/any/match str pat pat]
+					] [
+						find str pat
+					]
+				] [
+					all [
+						datatype? get :pat 
+						type = :pat
+					]
+				]
+			]
+		] [
+			str: form-pad word 15 
+			append str #" " 
+			append str form-pad type 10 - ((length? str) - 15) 
+			append obj reform [
+				"  " str 
+				if type &lt;&gt; 'unset! [form-val pick vals 1] 
+				newline
+			]
+		] 
+		vals: next vals
+	] 
+	obj
+]
+
+?: help: func [
+	"Prints information about words and values." 
+	'word [any-type!] 
+	/local value args item type-name refmode types attrs rtype
+][
+	trim/tail rejoin collect [
+		if unset? get/any 'word [exit]
+		if all [word? :word not value? :word] [word: mold :word]
+		if any [string? :word all [word? :word datatype? get :word]][
+			types: dump-obj/match system/words :word
+			sort types
+			if not empty? types [
+				keep reform ["Found these words:" newline types newline]
+				exit
+			]
+			keep reform ["No information on" word "(word has no value)" newline] 
+			exit
+		] 
+		type-name: func [value] [
+			value: mold type? :value 
+			clear back tail value 
+			join either find "aeiou" first value ["an "] ["a "] value
+		] 
+		if not any [word? :word path? :word] [
+			keep reform [mold :word "is" type-name :word newline] 
+			exit
+		] 
+		value: either path? :word [first reduce reduce [word]] [get :word] 
+		if not any-function? :value [
+			keep reform [uppercase mold word "is" type-name :value "of value: "] 
+			keep either object? value [keep "^/" dump-obj value] [mold :value] 
+			keep "^/"
+			exit
+		] 
+		args: third :value 
+		keep "USAGE:^/^-" 
+		if not op? :value [keep append uppercase mold word " "] 
+		while [not tail? args] [
+			item: first args 
+			if :item = /local [break] 
+			if any [all [any-word? :item not set-word? :item] refinement? :item] [
+				keep append mold :item " " 
+				if op? :value [keep append uppercase mold word " " value: none]
+			] 
+			args: next args
+		] 
+		keep "^/" 
+		args: head args 
+		value: get word 
+		keep "^/DESCRIPTION:^/" 
+		either string? pick args 1 [
+			keep reform [tab first args newline tab uppercase mold word "is" type-name :value "value.^/"] 
+			args: next args
+		][
+			keep "^-(undocumented)^/"
+		] 
+		if block? pick args 1 [
+			attrs: first args 
+			args: next args
+		] 
+		if tail? args [exit] 
+		while [not tail? args] [
+			item: first args 
+			args: next args 
+			if :item = /local [break] 
+			either not refinement? :item [
+				all [set-word? :item :item = to-set-word 'return block? first args rtype: first args] 
+				if none? refmode [
+					keep "^/ARGUMENTS:^/" 
+					refmode: 'args
+				]
+			] [
+				if refmode &lt;&gt; 'refs [
+					keep "^/REFINEMENTS:^/" 
+					refmode: 'refs
+				]
+			] 
+			either refinement? :item [
+				keep reform [tab mold item] 
+				if string? pick args 1 [keep reform [" --" first args] args: next args] 
+				keep "^/"
+			] [
+				if all [any-word? :item not set-word? :item] [
+					if refmode = 'refs [keep tab] 
+					keep reform [tab :item "-- "] 
+					types: if block? pick args 1 [args: next args first back args] 
+					if string? pick args 1 [keep reform [first args ""] args: next args] 
+					if not types [types: 'any] 
+					keep rejoin ["(Type: " types ")"] 
+					keep "^/"
+				]
+			]
+		] 
+		if rtype [keep reform ["^/RETURNS:^/^-" rtype newline]]
+		if attrs [
+			keep "^/(SPECIAL ATTRIBUTES)^/" 
+			while [not tail? attrs] [
+				value: first attrs 
+				attrs: next attrs 
+				if any-word? value [
+					keep reform [tab value] 
+					if string? pick attrs 1 [
+						keep reform [" -- " first attrs] 
+						attrs: next attrs
+					] 
+					keep "^/"
+				]
+			]
+		] 
+	]
+]
+
+clean-script: use [out spaced indent emit-line emit-space emit load-next][
+	out: none ; output text
+	spaced: off ; add extra bracket spacing
+	indent: "" ; holds indentation tabs
+
+	emit-line: func [] [append out newline]
+
+	emit-space: func [pos] [
+		append out either newline = last out [indent] [
+			pick [#" " ""] found? any [
+				spaced
+				not any [find "[(" last out find ")]" first pos]
+			]
+		]
+	]
+
+	emit: func [from to] [emit-space from append out copy/part from to]
+
+	load-next: func [string [string!]][
+		load/next string
+	]
+
+	func [
+		"Returns new script text with standard spacing (pretty printed)."
+		script "Original Script text"
+		/spacey "Optional spaces near brackets and parens"
+		/gaps "Force space between two blocks"
+		/detab "Use spaces instead of tabs"
+		/indented initial [string!] "Initial Indent"
+		/local str new tab
+	][
+		tab: either detab ["    "]["^-"]
+		spaced: found? spacey
+		gaps: either gaps [
+			[end skip]
+		][
+			["][" (remove/part indent length? tab emit str 2 append indent tab)]
+		]
+		indent: copy any [initial ""]
+		out: append clear copy script newline
+
+		parse script blk-rule: [
+			some [
+				str:
+				newline (emit-line) |
+				" " | "^-" |
+				#";" [thru newline | to end] new: (emit str new) |
+				gaps |
+				["#[" | "[" | "("] new: (emit str new append indent tab) blk-rule |
+				["]" | ")"] (remove/part indent length? tab emit str 1) break |
+				skip (set [value new] load-next str emit str new) :new
+			]
+		]
+		remove out ; remove first char
+	]
+]
+
+; example: print clean-script read %clean-script.r
+
+path: change-dir first split-path any [
+	textmate/filepath %/tmp/
 ]
 
 set-modes system/ports/input [
@@ -19,25 +311,55 @@ set-modes system/ports/input [
 	binary: false
 ]
 
-in*: any [
-    get-env "TM_SELECTED_TEXT"
-    get-env "TM_CURRENT_LINE"
-]
+use [space input output line line-breaks indent position first-indent?][
+	space: charset " ^-"
 
-prin either in* [
-	either not error? err*: try [out*: do in*][
-		mold/all :out*
+	parse/all line: any [
+		textmate/current-line
+		"()"
 	][
-		err*: disarm err*
-		rejoin [
-			" {^/** "
-			system/error/(err*/type)/type ": "
-			reform bind compose [(system/error/(err*/type)/(err*/id))] in err* 'self
-			"^/** Near: " mold get in err* 'near
-              "^/} "
-		]
+		[copy indent some space position: | (indent: "") position:]
 	]
-][""]</string>
+
+	input: any [
+		textmate/selected-text
+		textmate/current-line
+	]
+
+	line-breaks: use [count][
+		count: 0
+		parse/all input [some [[crlf | newline] (++ count) | skip]]
+		count
+	]
+
+	indent: either any [
+		none? textmate/selected-text
+		equal? textmate/line-number textmate/input-start-line
+		equal? textmate/line-number textmate/input-start-line + line-breaks
+	][indent][""]
+
+	switch/default type?/word set/any 'output try [do input][
+		error! [
+			output: disarm output
+			print rejoin [
+				"^/; ** "
+				system/error/(output/type)/type ": "
+				reform bind compose [(system/error/(output/type)/(output/id))] in output 'self
+				"^/; ** Near: " mold get in output 'near
+			]
+		]
+		unset! []
+	][
+		output: clean-script/indented mold/all :output indent
+		output: any [
+			find/match output indent
+			output
+		]
+		unless textmate/selected-text [insert output indent]
+		prin output
+	]
+]
+</string>
 	<key>fallbackInput</key>
 	<string>line</string>
 	<key>input</key>
