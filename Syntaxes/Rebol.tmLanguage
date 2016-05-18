@@ -307,12 +307,12 @@
 			<key>name</key>
 			<string>comment.line.shebang.rebol</string>
 		</dict>
-		<key>error-commas</key>
+		<key>error-chars</key>
 		<dict>
 			<key>match</key>
-			<string>,</string>
+			<string>[,}]</string>
 			<key>name</key>
-			<string>invalid.illegal.comma.rebol</string>
+			<string>invalid.illegal.char.rebol</string>
 		</dict>
 		<key>errors</key>
 		<dict>
@@ -320,7 +320,7 @@
 			<array>
 				<dict>
 					<key>include</key>
-					<string>#error-commas</string>
+					<string>#error-chars</string>
 				</dict>
 			</array>
 		</dict>
@@ -525,7 +525,7 @@
 		<key>string-url</key>
 		<dict>
 			<key>match</key>
-			<string>[A-Za-z][\w-]{1,15}:(/{0,3}[^\s\n\[\]\(\)]+|//)</string>
+			<string>[A-Za-z][\w-]{0,15}:(/{0,3}[^\s\n\[\]\(\)]+|//)</string>
 			<key>name</key>
 			<string>string.other.url.rebol</string>
 		</dict>
@@ -682,7 +682,7 @@
 		<key>word</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=^|[\s\[\]()}"])[A-Za-z=\-\?\!\_\*\+\.`~\&amp;][A-Za-z0-9=\-\!\?\_\*\+\.`~&amp;]*(/\d+)*(/(?=[A-Za-z=\-\?\!\_\*\+\.`~\&amp;\(:'])|(?=[\s\[\]\(\)\{"]|$))</string>
+			<string>(?&lt;=^|[\s\[\]()}"/])[A-Za-z=\-\?\!\_\*\+\.`~\&amp;][A-Za-z0-9=\-\!\?\_\*\+\.`~&amp;]*(/\d+)*(/(?=[A-Za-z=\-\?\!\_\*\+\.`~\&amp;\(:'%])|(?=[\s\[\]\(\)\{"]|$))</string>
 			<key>name</key>
 			<string>constant.other.word.rebol</string>
 		</dict>
@@ -710,7 +710,7 @@
 		<key>word-infix</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=^|[\s\[\]()}"])(\+\+?|--?|\*\*?|//?|=|&gt;=?|&lt;(=|&gt;)?)(?=[\s\[\](){"])</string>
+			<string>(?&lt;=^|[\s\[\]()}"/])(\+\+?|--?|\*\*?|//?|=|&gt;=?|&lt;(=|&gt;)?)(?=[\s\[\](){"])</string>
 			<key>name</key>
 			<string>keyword.control.native.rebol</string>
 		</dict>
@@ -731,7 +731,7 @@
 		<key>word-native</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=^|[\s\[\]()}"])(about|abs|absolute|action\?|add|alert|alias|all|alter|and~|and|any|any-block\?|any-function\?|any-string\?|any-type\?|any-word\?|append|arccosine|arcsine|arctangent|array|ask|at|back|binary\?|bind|bitset\?|block\?|body-of|boot-prefs|break|browse|build-tag|call|caret-to-offset|case|catch|center-face|change|change-dir|char\?|charset|checksum|choose|clean-path|clear|clear-fields|close|closure|collect|comment|complement|compose|compress|confine|confirm|connected\?|context|continue-post|copy|cosine|cp|crypt-strength\?|cvs-date|cvs-version|datatype\?|date\?|debase|decimal\?|decode-cgi|decode-url|decompress|deflag-face|dehex|delete|demo|desktop|detab|dh-compute-key|dh-generate-key|dh-make-key|difference|dir\?|dirize|disarm|dispatch|divide|do|do-boot|do-events|do-face|do-face-alt|does|dsa-generate-key|dsa-make-key|dsa-make-signature|dsa-verify-signature|dump-face|dump-pane|echo|editor|either|else|email\?|emailer|empty\?|enbase|entab|equal\?|error\?|even\?|event\?|exclude|exists-thru\?|exists\?|exit|exp|extract|fifth|file\?|find|find-key-face|find-window|first|flag-face|flag-face\?|flash|focus|for|forall|foreach|forever|form|forskip|found\?|fourth|free|func|function\??|get|get-env|get-modes|get-net-info|get-style|get-word\?|greater-or-equal\?|greater\?|halt|has|hash\?|head\??|help|hide|hide-popup|if|image\?|import-email|in|in-window\?|index\?|info\?|inform|input|input\?|insert|insert-event-func|inside\?|integer\?|intersect|issue\?|join|keep|last|launch|launch-thru|layout|length\?|lesser-or-equal\?|lesser\?|library\?|link-app\?|link\?|list-dir|list\?|lit-path\?|lit-word\?|load|load-image|load-prefs|load-thru|log-10|log-2|log-e|logic\?|loop|lowercase|make|make-dir|make-face|max|maximum|maximum-of|min|minimum|minimum-of|modified\?|mold|money\?|multiply|native\?|negate|negative\?|net-error|next|none\?|not|not-equal\?|now|number\?|object\?|odd\?|offset-to-caret|offset\?|op\?|open|open-events|or|or~|outside\?|pair\?|paren\?|parse|parse-email-addrs|parse-header|parse-header-date|parse-xml|path-thru|path\?|pick|poke|port\?|positive\?|power|prin|print|probe|protect|protect-system|q|query|quit|random|read|read-io|read-net|read-thru|reboot|recycle|reduce|refinement\?|reform|rejoin|remainder|remold|remove|remove-event-func|rename|repeat|repend|replace|request|request-color|request-date|request-download|request-file|request-list|request-pass|request-text|resend|return|reverse|routine\?|rsa-encrypt|rsa-generate-key|rsa-make-key|same\?|save|save-prefs|save-user|screen-offset\?|script\?|scroll-para|second|secure|select|send|series\?|set|set-env|set-font|set-modes|set-net|set-para|set-path\?|set-style|set-user|set-user-name|set-word\?|show|show-popup|sine|size-text|size\?|skip|sort|source|span\?|spec-of|split-path|square-root|strict-equal\?|strict-not-equal\?|string\?|struct\?|stylize|subtract|switch|tag\?|tail\??|tangent|textinfo|third|throw|throw-on-error|time\?|title-of|to|to-local-file|to-rebol-file|trace|trim|try|tuple\?|types-of|type\?|unfocus|uninstall|union|unique|unless|unprotect|unset|unset\?|until|unview|update|upgrade|uppercase|url\?|usage|use|values-of|value\?|vbug|view|view-install|view-prefs|view\?|viewed\?|wait|what|what-dir|while|win-offset\?|within\?|words-of|word\?|write|write-io|write-user|xor|xor~|zero\?|/local|thru|end)(/(?=[A-Za-z=\-\?\!\_\*\+\.`~\&amp;])|(?=[\s\[\](){"]|$))</string>
+			<string>(?&lt;=^|[\s\[\]()}"])(about|abs|absolute|action\?|add|alert|alias|all|alter|and~|and|any|any-block\?|any-function\?|any-string\?|any-type\?|any-word\?|append|arccosine|arcsine|arctangent|array|ask|at|back|binary\?|bind|bitset\?|block\?|body-of|boot-prefs|break|browse|build-tag|call|caret-to-offset|case|catch|center-face|change|change-dir|char\?|charset|checksum|choose|clean-path|clear|clear-fields|close|closure|collect|comment|complement|compose|compress|confine|confirm|connected\?|context|continue-post|copy|cosine|cp|crypt-strength\?|cvs-date|cvs-version|datatype\?|date\?|debase|decimal\?|decode-cgi|decode-url|decompress|deflag-face|dehex|delete|demo|desktop|detab|dh-compute-key|dh-generate-key|dh-make-key|difference|dir\?|dirize|disarm|dispatch|divide|do|do-boot|do-events|do-face|do-face-alt|does|dsa-generate-key|dsa-make-key|dsa-make-signature|dsa-verify-signature|dump-face|dump-pane|echo|editor|either|else|email\?|emailer|empty\?|enbase|entab|equal\?|error\?|even\?|event\?|exclude|exists-thru\?|exists\?|exit|exp|extract|fifth|file\?|find|find-key-face|find-window|first|flag-face|flag-face\?|flash|focus|for|forall|foreach|forever|form|forskip|found\?|fourth|free|func|function\??|get|get-env|get-modes|get-net-info|get-style|get-word\?|greater-or-equal\?|greater\?|halt|has|hash\?|head\??|help|hide|hide-popup|if|image\?|import-email|in|in-window\?|index\?|info\?|inform|input|input\?|insert|insert-event-func|inside\?|integer\?|intersect|issue\?|join|keep|last|launch|launch-thru|layout|length\?|lesser-or-equal\?|lesser\?|library\?|link-app\?|link\?|list-dir|list\?|lit-path\?|lit-word\?|load|load-image|load-prefs|load-thru|log-10|log-2|log-e|logic\?|loop|lowercase|make|make-dir|make-face|max|maximum|maximum-of|min|minimum|minimum-of|modified\?|mold|money\?|multiply|native\?|negate|negative\?|net-error|next|none\?|not|not-equal\?|now|number\?|object\?|odd\?|offset-to-caret|offset\?|op\?|open|open-events|or|or~|outside\?|pair\?|paren\?|parse|parse-email-addrs|parse-header|parse-header-date|parse-xml|path-thru|path\?|pick|poke|port\?|positive\?|power|prin|print|probe|protect|protect-system|q|query|quit|random|read|read-io|read-net|read-thru|reboot|recycle|reduce|refinement\?|reform|rejoin|remainder|remold|remove|remove-event-func|rename|repeat|repend|replace|request|request-color|request-date|request-download|request-file|request-list|request-pass|request-text|resend|return|reverse|routine\?|rsa-encrypt|rsa-generate-key|rsa-make-key|same\?|save|save-prefs|save-user|screen-offset\?|script\?|scroll-para|second|secure|select|send|series\?|set|set-env|set-font|set-modes|set-net|set-para|set-path\?|set-style|set-user|set-user-name|set-word\?|show|show-popup|sine|size-text|size\?|skip|sort|source|span\?|spec-of|split-path|square-root|strict-equal\?|strict-not-equal\?|string\?|struct\?|stylize|subtract|switch|tag\?|tail\??|take|tangent|textinfo|third|throw|throw-on-error|time\?|title-of|to|to-local-file|to-rebol-file|trace|trim|try|tuple\?|types-of|type\?|unfocus|uninstall|union|unique|unless|unprotect|unset|unset\?|until|unview|update|upgrade|uppercase|url\?|usage|use|values-of|value\?|vbug|view|view-install|view-prefs|view\?|viewed\?|wait|what|what-dir|while|win-offset\?|within\?|words-of|word\?|write|write-io|write-user|xor|xor~|zero\?|/local|thru|end)(/(?=[A-Za-z=\-\?\!\_\*\+\.`~\&amp;])|(?=[\s\[\](){"]|$))</string>
 			<key>name</key>
 			<string>keyword.control.native.rebol</string>
 		</dict>
