@@ -849,7 +849,7 @@
 		<key>word-set</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=^|[\s(/\[])[A-Za-z!\&amp;\*\+\-.=\?^_`|~][!&amp;'*+\-.0-9=?a-zA-Z^_`|~]*(/(\:?[A-Za-z=\-\?!_\*\+.`~\&amp;][!&amp;'*+\-.0-9=?a-zA-Z^_`|~]*|\d+|\(.*\)(?=[/:]))+)*:(?=[\s()/;\[\]]|$)</string>
+			<string>(?&lt;=^|[\s(/\[])[A-Za-z!\&amp;\*\+\-.=\?^_`|~][!&amp;'*+\-.0-9=?a-zA-Z^_`|~]*(/(\:?[A-Za-z=\-\?!_\*\+.`~\&amp;][!&amp;'*+\-.0-9=?a-zA-Z^_`|~]*|\d+|\(.*\)(?=[/:])))*:(?=[\s()/;\[\]]|$)</string>
 			<key>name</key>
 			<string>variable.other.setword.rebol</string>
 		</dict>
