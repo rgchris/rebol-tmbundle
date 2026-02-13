@@ -5,14 +5,19 @@
 	<key>fileTypes</key>
 	<array>
 		<string>r</string>
+		<string>r2</string>
+		<string>r3</string>
 		<string>reb</string>
 		<string>red</string>
 		<string>reds</string>
 		<string>topaz</string>
-		<string>r3</string>
 	</array>
 	<key>firstLineMatch</key>
-	<string>^(#![.]{0,2}(/[a-z0-9-_]+)*/r(eb|ed\b|en\b|3\b).*|(Rebol|REBOL|Red(/System)?|Topaz) \[)$</string>
+	<string>^(#!.*\b(reb|red|r3-|r3|ren-c)|(Rebol|REBOL|Red(\/System)?|Topaz) \[$)</string>
+	<key>foldingStartMarker</key>
+	<string>(^|#| )(\[[^\]]*|\([^\)]*|\{[^\}]*)$</string>
+	<key>foldingStopMarker</key>
+	<string>^\s*[\]\)\}]( |$)</string>
 	<key>injections</key>
 	<dict>
 		<key>string.quoted.double.rebol</key>
@@ -95,8 +100,24 @@
 		<dict>
 			<key>begin</key>
 			<string>(16)?#\{</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.binary.begin.rebol</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\}</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.binary.end.rebol</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.other.base16.rebol</string>
 			<key>patterns</key>
@@ -121,8 +142,24 @@
 		<dict>
 			<key>begin</key>
 			<string>64#\{</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.binary.begin.rebol</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\}</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.binary.end.rebol</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.other.base64.rebol</string>
 			<key>patterns</key>
@@ -147,8 +184,24 @@
 		<dict>
 			<key>begin</key>
 			<string>2#\{</string>
+			<key>beginCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.binary.begin.rebol</string>
+				</dict>
+			</dict>
 			<key>end</key>
 			<string>\}</string>
+			<key>endCaptures</key>
+			<dict>
+				<key>0</key>
+				<dict>
+					<key>name</key>
+					<string>punctuation.definition.binary.end.rebol</string>
+				</dict>
+			</dict>
 			<key>name</key>
 			<string>string.quoted.other.base2.rebol</string>
 			<key>patterns</key>
@@ -172,7 +225,7 @@
 		<key>character</key>
 		<dict>
 			<key>match</key>
-			<string>#"(\^(\(([0-9a-fA-F]{2,6}|[a-zA-Z]{3,6})\)|.)|[^\^\"])"</string>
+			<string>#"([^^\"]|\^(?:[\"\-\/@\[\\\]^\_A-Z~]|\((?:[0-9a-fA-F]{2,6}|[a-zA-Z]{3,6})\)))"</string>
 			<key>name</key>
 			<string>constant.other.character.rebol</string>
 		</dict>
@@ -199,7 +252,14 @@
 		<key>character-inline</key>
 		<dict>
 			<key>match</key>
-			<string>\^(\([0-9a-fA-F]{2,4}\)|.)</string>
+			<string>([^^\"]|\^(?:[\"\-\/@\[\\\]^\_A-Z]|\((?:[0-9a-fA-F]{2,6}|[a-zA-Z]{3,6})\)))</string>
+			<key>name</key>
+			<string>constant.character.escaped.rebol</string>
+		</dict>
+		<key>character-multi-inline</key>
+		<dict>
+			<key>match</key>
+			<string>([^^\{\}\s"=]|\^(?:[\"\-\/@\[\\\]^\_A-Z]|\((?:[0-9a-fA-F]{2,6}|[a-zA-Z]{3,6})\)))</string>
 			<key>name</key>
 			<string>constant.character.rebol</string>
 		</dict>
@@ -360,14 +420,14 @@
 		<key>logic</key>
 		<dict>
 			<key>match</key>
-			<string>(#\[(true|false|none)]|&gt;(true|false|none|0|1|_)&lt;)</string>
+			<string>(#\[(true|false|none)]|&gt;(true|false|none)&lt;)</string>
 			<key>name</key>
 			<string>constant.language.logic.rebol</string>
 		</dict>
 		<key>punct-block-begin</key>
 		<dict>
 			<key>match</key>
-			<string>\[</string>
+			<string>\#?\[</string>
 			<key>name</key>
 			<string>punctuation.section.block.begin.rebol</string>
 		</dict>
@@ -381,7 +441,7 @@
 		<key>punct-group-begin</key>
 		<dict>
 			<key>match</key>
-			<string>\(</string>
+			<string>\#?\(</string>
 			<key>name</key>
 			<string>punctuation.section.group.begin.rebol</string>
 		</dict>
@@ -449,7 +509,7 @@
 		<key>string-issue</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=^|[\s\[(/])#[^\s\n\[\]\(\)]*</string>
+			<string>(?&lt;=^|[\s\[(/])#[^\s\n\[\]\(\)\"\{\}]*</string>
 			<key>name</key>
 			<string>string.other.issue.rebol</string>
 		</dict>
@@ -462,7 +522,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.multiline.begin.rebol</string>
+					<string>punctuation.definition.string.begin.rebol</string>
 				</dict>
 			</dict>
 			<key>end</key>
@@ -472,7 +532,7 @@
 				<key>0</key>
 				<dict>
 					<key>name</key>
-					<string>punctuation.definition.string.multiline.end.rebol</string>
+					<string>punctuation.definition.string.end.rebol</string>
 				</dict>
 			</dict>
 			<key>name</key>
@@ -485,7 +545,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#character-inline</string>
+					<string>#character-multi-inline</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -507,6 +567,18 @@
 			<string>string.quoted.other.rebol</string>
 			<key>patterns</key>
 			<array>
+				<dict>
+					<key>include</key>
+					<string>#string-rsp-tag</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#character-multi-inline</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#character-html</string>
+				</dict>
 				<dict>
 					<key>include</key>
 					<string>#string-nested-multiline</string>
@@ -534,6 +606,13 @@
 			<key>name</key>
 			<string>string.quoted.double.rebol</string>
 		</dict>
+		<key>string-reference</key>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=^|[\s\[(/])@[^\s\n\[\]\(\)\"\{\}]+</string>
+			<key>name</key>
+			<string>string.other.reference.rebol</string>
+		</dict>
 		<key>string-rsp-tag</key>
 		<dict>
 			<key>begin</key>
@@ -553,7 +632,7 @@
 		<key>string-tag</key>
 		<dict>
 			<key>begin</key>
-			<string>(?&lt;=^|\s|\[|\(|\/)&lt;(?:\/|%={0,2}\ |\!)?(?:([_a-zA-Z0-9]+):)?([_a-zA-Z0-9:]+)</string>
+			<string>(?&lt;=^|\s|\[|\(|\/)&lt;(?:\/|%={0,2}\ |\!)?(?:([_a-zA-Z0-9]+):)?([_a-zA-Z0-9:][_\-a-zA-Z0-9:]*)</string>
 			<key>captures</key>
 			<dict>
 				<key>1</key>
@@ -658,6 +737,10 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#string-reference</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#string-file-quoted</string>
 				</dict>
 				<dict>
@@ -717,7 +800,7 @@
 		<key>value-date</key>
 		<dict>
 			<key>match</key>
-			<string>\d{1,4}\-([Jj][Aa][Nn]([Uu][Aa][Rr][Yy])?|[Ff][Ee][Bb]([Rr][Uu][Aa][Rr][Yy])?|[Mm][Aa][Rr]([Cc][Hh])?|[Aa][Pp][Rr]([Ii][Ll])?|[Mm][Aa][Yy]|[Jj][Uu][Nn][Ee]?|[Jj][Uu][Ll][Yy]?|[Aa][Uu][Gg]([Uu][Ss][Tt])?|[Ss][Ee][Pp]([Tt][Ee][Mm][Bb][Ee][Rr])?|[Oo][Cc][Tt]([Oo][Bb][Ee][Rr])?|[Nn][Oo][Vv]([Ee][Mm][Bb][Ee][Rr])?|[Dd][Ee][Cc]([Ee][Mm][Bb][Ee][Rr])?|[1-9]|1[012])\-\d{1,4}(/\d\d?[:]\d\d?([:]\d\d?(\.\d{1,5})?)?([+-]\d\d?[:]\d\d?)?)?</string>
+			<string>\d{1,4}\-([Jj][Aa][Nn]([Uu][Aa][Rr][Yy])?|[Ff][Ee][Bb]([Rr][Uu][Aa][Rr][Yy])?|[Mm][Aa][Rr]([Cc][Hh])?|[Aa][Pp][Rr]([Ii][Ll])?|[Mm][Aa][Yy]|[Jj][Uu][Nn][Ee]?|[Jj][Uu][Ll][Yy]?|[Aa][Uu][Gg]([Uu][Ss][Tt])?|[Ss][Ee][Pp]([Tt][Ee][Mm][Bb][Ee][Rr])?|[Oo][Cc][Tt]([Oo][Bb][Ee][Rr])?|[Nn][Oo][Vv]([Ee][Mm][Bb][Ee][Rr])?|[Dd][Ee][Cc]([Ee][Mm][Bb][Ee][Rr])?|[1-9]|1[012])\-\d{1,4}(/\d\d?[:]\d\d?([:]\d\d?(\.\d{1,6})?)?([+-]\d\d?[:]\d\d?)?)?</string>
 			<key>name</key>
 			<string>constant.numeric.date.rebol</string>
 		</dict>
@@ -728,17 +811,45 @@
 			<key>name</key>
 			<string>constant.numeric.money.rebol</string>
 		</dict>
+		<key>value-nan</key>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=^|[\s\[(/])[-+]?1\.#(INF|NaN)(?=[\s()/\[\];]|$)</string>
+			<key>name</key>
+			<string>constant.numeric.rebol</string>
+		</dict>
 		<key>value-number</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=^|[\s\[(/])([-+]?((\d+[\d']*[.,]?[\d']*)|([.,]\d+[\d']*))((e|E)(\+|-)?\d+)?)(?=[\s()/\[\];]|$)</string>
+			<string>(?&lt;=^|[\s\[(/])([-+]?((\d+[\d']*[.,]?[\d']*)|([.,]\d+[\d']*))((e|E)(\+|-)?\d+|%)?)(?=[\s()/\[\];]|$)</string>
 			<key>name</key>
 			<string>constant.numeric.rebol</string>
+		</dict>
+		<key>value-number-binary</key>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=^|[\s\[(/])2#[01]+(?=[\s()/\[\];]|$)</string>
+			<key>name</key>
+			<string>constant.numeric.binary.rebol</string>
+		</dict>
+		<key>value-number-hex</key>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=^|[\s\[(/])16#[0-9A-Fa-f]+(?=[\s()/\[\];]|$)</string>
+			<key>name</key>
+			<string>constant.numeric.hex.rebol</string>
+		</dict>
+		<key>value-number-octal</key>
+		<dict>
+			<key>match</key>
+			<string>(?&lt;=^|[\s\[(/])8#[0-7]+(?=[\s()/\[\];]|$)</string>
+			<key>name</key>
+			<string>constant.numeric.octal.rebol</string>
 		</dict>
 		<key>value-pair</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;!\w)[-+]?[[:digit:]]+[x][-+]?[[:digit:]]+(?=[\s\[\](){";]|$)</string>
+			<string>(?&lt;!\w)[-+]?[[:digit:]]+(\.[[:digit:]]*)?[x][-+]?[[:digit:]]+(\.[[:digit:]]*)?(?=[\s\[\](){";]|$)</string>
 			<key>name</key>
 			<string>constant.numeric.pair.rebol</string>
 		</dict>
@@ -793,7 +904,23 @@
 				</dict>
 				<dict>
 					<key>include</key>
+					<string>#value-nan</string>
+				</dict>
+				<dict>
+					<key>include</key>
 					<string>#value-number</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#value-number-binary</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#value-number-octal</string>
+				</dict>
+				<dict>
+					<key>include</key>
+					<string>#value-number-hex</string>
 				</dict>
 			</array>
 		</dict>
@@ -828,7 +955,7 @@
 		<key>word-parse</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=^|[\s\[])(thru|some|opt|end)(?=[\s\[\](;]|$)</string>
+			<string>(?&lt;=^|[\s\[])(thru|some|opt|end|ahead)(?=[\s\[\](;]|$)</string>
 			<key>name</key>
 			<string>keyword.control.parse.rebol</string>
 		</dict>
@@ -885,7 +1012,7 @@
 				</dict>
 				<dict>
 					<key>include</key>
-					<string>#words-qm</string>
+					<string>#words-other</string>
 				</dict>
 				<dict>
 					<key>include</key>
@@ -916,14 +1043,14 @@
 		<key>words-datatype</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=^|[\s\[\(])(end\!|unset\!|error\!|datatype\!|context\!|native\!|action\!|routine\!|op\!|function\!|object\!|struct\!|library\!|port\!|any-type\!|any-word\!|any-function\!|number\!|series\!|any-string\!|any-block\!|symbol\!|word\!|set-word\!|get-word\!|lit-word\!|refinement\!|none\!|logic\!|integer\!|decimal\!|money\!|time\!|date\!|char\!|pair\!|event\!|tuple\!|bitset\!|string\!|issue\!|binary\!|file\!|email\!|url\!|image\!|tag\!|block\!|paren\!|path\!|set-path\!|lit-path\!|hash\!|list\!)(?=[\s\[\](){";]|$)</string>
+			<string>(?&lt;=^|[\s\[\(])(action|any-block|any-function|any-string|any-type|any-word|binary|bitset|block|char|closure|command|context|datatype|date|decimal|email|end|error|event|file|frame|function|get-path|get-word|gob|handle|hash|image|integer|issue|library|list|lit-path|lit-word|logic|map|module|money|native|none|number|object|op|pair|paren|path|percent|port|rebcode|ref|refinement|routine|series|set-path|set-word|string|struct|symbol|tag|task|time|tuple|typeset|unset|url|utype|vector|word)\!(?=[\s\[\](){";]|$)</string>
 			<key>name</key>
 			<string>keyword.control.datatype.rebol</string>
 		</dict>
 		<key>words-header</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=^\[|^)(Boron|REBOL|Rebol|Red(/System)?|Topaz|World)(?=\s*\[)</string>
+			<string>(?&lt;=^\[|^)(Boron|Rebol|Red(/System)?|Topaz|World|REBOL)(?=\s*\[)</string>
 			<key>name</key>
 			<string>keyword.control.header.rebol</string>
 		</dict>
@@ -944,7 +1071,7 @@
 		<key>words-native</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=^|[\s\[\]()])(about|abs|absolute|action\?|add|alert|alias|all|alter|and~|and|any|any-block\?|any-function\?|any-string\?|any-type\?|any-word\?|append|arccosine|arcsine|arctangent|array|ask|at|back|binary\?|bind|bitset\?|block\?|body-of|boot-prefs|break|browse|build-tag|call|caret-to-offset|case|catch|center-face|change|change-dir|char\?|charset|checksum|choose|clean-path|clear|clear-fields|close|closure|collect|comment|complement|compose|compress|confine|confirm|connected\?|context|continue-post|copy|cosine|cp|crypt-strength\?|cvs-date|cvs-version|datatype\?|date\?|debase|decimal\?|decode-cgi|decode-url|decompress|deflag-face|dehex|delete|demo|desktop|detab|dh-compute-key|dh-generate-key|dh-make-key|difference|dir\?|dirize|disarm|dispatch|divide|do|do-boot|do-events|do-face|do-face-alt|does|dsa-generate-key|dsa-make-key|dsa-make-signature|dsa-verify-signature|dump-face|dump-pane|echo|editor|either|else|email\?|emailer|empty\?|enbase|entab|equal\?|error\?|even\?|event\?|exclude|exists-thru\?|exists\?|exit|exp|extract|fifth|file\?|find|find-key-face|find-window|first|flag-face|flag-face\?|flash|focus|for|forall|foreach|forever|form|forskip|found\?|fourth|free|func|function\??|get|get-env|get-modes|get-net-info|get-style|get-word\?|greater-or-equal\?|greater\?|halt|has|hash\?|head\??|help|hide|hide-popup|if|image\?|import-email|in|in-window\?|index\?|info\?|inform|input|input\?|insert|insert-event-func|inside\?|integer\?|intersect|issue\?|join|keep|last|launch|launch-thru|layout|length\?|lesser-or-equal\?|lesser\?|library\?|link-app\?|link\?|list-dir|list\?|lit-path\?|lit-word\?|load|load-image|load-prefs|load-thru|log-10|log-2|log-e|logic\?|loop|lowercase|make|make-dir|make-face|max|maximum|maximum-of|min|minimum|minimum-of|modified\?|mold|money\?|multiply|native\?|negate|negative\?|net-error|next|none\?|not|not-equal\?|now|number\?|object\?|odd\?|offset-to-caret|offset\?|op\?|open|open-events|or|or~|outside\?|pair\?|paren\?|parse|parse-email-addrs|parse-header|parse-header-date|parse-xml|path-thru|path\?|pick|poke|port\?|positive\?|power|prin|print|probe|protect|protect-system|q|query|quit|random|read|read-io|read-net|read-thru|reboot|recycle|reduce|refinement\?|reform|rejoin|remainder|remold|remove|remove-event-func|rename|repeat|repend|replace|request|request-color|request-date|request-download|request-file|request-list|request-pass|request-text|resend|return|reverse|routine\?|rsa-encrypt|rsa-generate-key|rsa-make-key|same\?|save|save-prefs|save-user|screen-offset\?|script\?|scroll-para|second|secure|select|send|series\?|set|set-env|set-font|set-modes|set-net|set-para|set-path\?|set-style|set-user|set-user-name|set-word\?|show|show-popup|sine|size-text|size\?|skip|sort|source|span\?|spec-of|split-path|square-root|strict-equal\?|strict-not-equal\?|string\?|struct\?|stylize|subtract|switch|tag\?|tail\??|take|tangent|textinfo|third|throw|throw-on-error|time\?|title-of|to|to-local-file|to-rebol-file|trace|trim|try|tuple\?|types-of|type\?|unfocus|uninstall|union|unique|unless|unprotect|unset|unset\?|until|unview|update|upgrade|uppercase|url\?|usage|use|values-of|value\?|vbug|view|view-install|view-prefs|view\?|viewed\?|wait|what|what-dir|while|win-offset\?|within\?|words-of|word\?|write|write-io|write-user|xor|xor~|zero\?|/local|thru|end)(/(?=[a-z])|(?=[\s\[\](){]|$))</string>
+			<string>(?&lt;=^|[\s\[\(])(about|abs|absolute|action\?|add|alert|alias|all|alter|and~|and|any|any-block\?|any-function\?|any-string\?|any-type\?|any-word\?|append|arccosine|arcsine|arctangent|array|ask|at|back|binary\?|bind|bitset\?|block\?|body-of|boot-prefs|break|browse|build-tag|call\/shell|call|caret-to-offset|case|catch|center-face|change|change-dir|char\?|charset|checksum|choose|clean-path|clear|clear-fields|close|closure|collect|comment|complement|compose|compress|confine|confirm|connected\?|context|continue-post|copy|cosine|cp|crypt-strength\?|cvs-date|cvs-version|datatype\?|date\?|debase|decimal\?|decode-cgi|decode-url|decompress|deflag-face|dehex|delete|demo|desktop|detab|dh-compute-key|dh-generate-key|dh-make-key|difference|dir\?|dirize|disarm|dispatch|divide|do|do-boot|do-events|do-face|do-face-alt|does|dsa-generate-key|dsa-make-key|dsa-make-signature|dsa-verify-signature|dump-face|dump-pane|echo|editor|either|else|email\?|emailer|empty\?|enbase|entab|equal\?|error\?|even\?|event\?|exclude|exists-thru\?|exists\?|exit|exp|extract|fifth|file\?|find|find-key-face|find-window|first|flag-face|flag-face\?|flash|focus|for|forall|foreach|forever|form|forskip|found\?|fourth|free|func|function\??|get|get-env|get-modes|get-net-info|get-style|get-word\?|greater-or-equal\?|greater\?|halt|has|hash\?|head\??|help|hide|hide-popup|if|image\?|import-email|import|in|in-window\?|index\?|info\?|inform|input|input\?|insert|insert-event-func|inside\?|integer\?|intersect|issue\?|join|keep|last|launch|launch-thru|layout|length\?|lesser-or-equal\?|lesser\?|library\?|link-app\?|link\?|list-dir|list\?|lit-path\?|lit-word\?|load|load-image|load-prefs|log-10|log-2|log-e|logic\?|loop|lowercase|make|make-dir|make-face|max|maximum|maximum-of|min|minimum|minimum-of|modified\?|mold|money\?|multiply|native\?|negate|negative\?|net-error|next|none\?|not|not-equal\?|now|number\?|object\?|odd\?|offset-to-caret|offset\?|op\?|open|open-events|or|or~|outside\?|pair\?|paren\?|parse|parse-email-addrs|parse-header|parse-header-date|parse-xml|path-thru|path\?|pick|poke|port\?|positive\?|power|prin|print|probe|protect|protect-system|q|query|quit|random|read|read-io|read-net|read-thru|reboot|recycle|reduce|refinement\?|reform|rejoin|remainder|remold|remove|remove-each|rename|repeat|repend|replace|request|request-color|request-date|request-download|request-file|request-list|request-pass|request-text|resend|return|reverse|routine\?|rsa-encrypt|rsa-generate-key|rsa-make-key|same\?|save|save-prefs|save-user|screen-offset\?|script\?|scroll-para|second|secure|select|send|series\?|set|set-env|set-font|set-modes|set-net|set-para|set-path\?|set-style|set-user|set-user-name|set-word\?|show|show-popup|sine|size-text|size\?|skip|sort|source|span\?|spec-of|split-path|square-root|strict-equal\?|strict-not-equal\?|string\?|struct\?|stylize|subtract|switch|tag\?|tail\??|take|tangent|textinfo|third|throw|throw-on-error|time\?|title-of|to|to-local-file|to-rebol-file|trace|trim|try|tuple\?|types-of|type\?|unfocus|uninstall|union|unique|unless|unprotect|unset|unset\?|until|unview|update|upgrade|uppercase|url\?|usage|use|values-of|value\?|vbug|view|view-install|view-prefs|view\?|viewed\?|wait|what|what-dir|while|win-offset\?|within\?|words-of|word\?|write|write-io|write-user|xor|xor~|zero\?|/local|thru|end)(?=[\s\]\)\/]|$)</string>
 			<key>name</key>
 			<string>keyword.control.native.rebol</string>
 		</dict>
@@ -958,9 +1085,9 @@
 		<key>words-qm</key>
 		<dict>
 			<key>match</key>
-			<string>(?&lt;=^|[\s\[(])(qm|route|render|redirect-to|publish|response|as|validate|verify|get-param|get-cookie|set-cookie|require)(/(?=[A-Za-z=\-\?\!\_\*\+\.`~\&amp;])|(?=[\s\[\](){";]|$))</string>
+			<string>(?&lt;=^|[\s\[(])(route|render|redirect-to|publish|response|as|validate|verify|get-param|get-cookie|set-cookie|require)(/(?=[A-Za-z=\-\?\!\_\*\+\.`~\&amp;])|(?=[\s\[\](){";]|$))</string>
 			<key>name</key>
-			<string>keyword.control.qm.rebol</string>
+			<string>keyword.control.other.rebol</string>
 		</dict>
 	</dict>
 	<key>scopeName</key>
